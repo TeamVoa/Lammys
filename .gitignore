@@ -40,8 +40,17 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Devin.cursorrules files
+.cursorrules
+.windsurfrules
+/tools/
+/tests/
+/py310/
+requirements.txt
+scratchpad.md
+.devcontainer/
 
-#data files
+# data files
 ballpics.md
 
 stripe-cli.zip
