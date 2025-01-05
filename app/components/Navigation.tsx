@@ -1,336 +1,272 @@
 'use client';
 
 import Link from 'next/link';
-<<<<<<< HEAD
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { user, loading, isAdmin } = useAuth();
   const router = useRouter();
-=======
-import { useAuth } from '@/lib/auth-context';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
-
-export default function Navigation() {
-  const { user, isAdmin, signOut, isLoading } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
->>>>>>> 9b3c2d631955f7b6202f0f164032c3d88ff88ed7
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-<<<<<<< HEAD
-        menuRef.current && 
-=======
-        menuRef.current &&
->>>>>>> 9b3c2d631955f7b6202f0f164032c3d88ff88ed7
+        dropdownRef.current &&
         buttonRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
+        !dropdownRef.current.contains(event.target as Node) &&
         !buttonRef.current.contains(event.target as Node)
       ) {
-        setIsMenuOpen(false);
+        setDropdownOpen(false);
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-<<<<<<< HEAD
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      setIsMenuOpen(false);
-      router.push('/');
+      router.push('/login');
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
 
-  return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex justify-between items-center relative">
-          {/* Logo - Centered */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
-=======
-  const handleSignOut = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    await signOut();
-    setIsMenuOpen(false);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
-  const handleDashboardClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!user) {
-      router.push('/login');
-    } else {
-      router.push(isAdmin ? '/admindash' : '/dashboard');
-    }
-    setIsMenuOpen(false);
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
     <nav className="bg-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex h-16 relative">
-          {/* Logo - Centered absolutely */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <Link href="/" className="text-xl font-bold text-blue-600">
->>>>>>> 9b3c2d631955f7b6202f0f164032c3d88ff88ed7
-              Lammy's
-            </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link href="/" className="text-2xl font-bold text-gray-800">
+                Lammy's
+              </Link>
+            </div>
           </div>
 
-<<<<<<< HEAD
-          {/* Invisible spacer to maintain layout */}
-          <div className="w-6"></div>
-
-          {/* Mobile Menu Button - Right aligned */}
-          <button 
-            ref={buttonRef}
-            className="text-gray-600 z-10"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg 
-              className="w-6 h-6" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M6 18L18 6M6 6l12 12" 
-                />
-              ) : (
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M4 6h16M4 12h16m-7 6h7" 
-                />
-              )}
-            </svg>
-          </button>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div
-              ref={menuRef}
-              className="absolute inset-x-0 top-full bg-white shadow-lg z-20"
-            >
-              <div className="container mx-auto px-6">
-                <div className="py-4">
-                  <div className="flex flex-col space-y-4">
-                    <Link
-                      href="/"
-                      className="text-gray-700 hover:text-blue-600"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Home
-                    </Link>
-                    <Link
-                      href="/booking"
-                      className="text-gray-700 hover:text-blue-600"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Book Now
-                    </Link>
-                    <Link
-                      href="/contact"
-                      className="text-gray-700 hover:text-blue-600"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Contact
-                    </Link>
-                    <Link
-                      href="/faq"
-                      className="text-gray-700 hover:text-blue-600"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      FAQ
-                    </Link>
-                    
-                    {!loading && (
-                      <>
-                        {user ? (
-                          <>
-                            {isAdmin ? (
-                              <Link
-                                href="/admindash"
-                                className="text-gray-700 hover:text-blue-600"
-                                onClick={() => setIsMenuOpen(false)}
-                              >
-                                Dashboard
-                              </Link>
-                            ) : (
-                              <Link
-                                href="/dashboard"
-                                className="text-gray-700 hover:text-blue-600"
-                                onClick={() => setIsMenuOpen(false)}
-                              >
-                                Dashboard
-                              </Link>
-                            )}
-                            <button
-                              onClick={handleLogout}
-                              className="text-left text-gray-700 hover:text-blue-600"
-                            >
-                              Sign Out
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <Link
-                              href="/login"
-                              className="text-gray-700 hover:text-blue-600"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              Login
-                            </Link>
-                            <Link
-                              href="/register"
-                              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 inline-block text-center"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              Register
-                            </Link>
-                          </>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-=======
-          {/* Hamburger menu button - Positioned on the right */}
-          <div className="ml-auto flex items-center">
+          {/* Mobile menu button */}
+          <div className="flex items-center sm:hidden">
             <button
-              ref={buttonRef}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              onClick={toggleMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
-              {!isMenuOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              )}
+              {/* Icon when menu is closed */}
+              <svg
+                className={`${isOpen ? 'hidden' : 'block'} h-6 w-6`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+              {/* Icon when menu is open */}
+              <svg
+                className={`${isOpen ? 'block' : 'hidden'} h-6 w-6`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
-        </div>
 
-        {/* Menu content */}
-        {isMenuOpen && (
-          <div ref={menuRef} className="py-2 border-t border-gray-200">
-            <div className="space-y-1">
+          {/* Desktop menu */}
+          <div className="hidden sm:flex sm:items-center sm:ml-6">
+            <div className="flex space-x-4">
               <Link
                 href="/"
-                className={`block px-3 py-2 text-base font-medium ${
+                className={`${
                   pathname === '/'
-                    ? 'bg-blue-50 border-l-4 border-blue-500 text-blue-700'
-                    : 'text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-                }`}
-                onClick={() => setIsMenuOpen(false)}
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:text-gray-900'
+                } px-3 py-2 rounded-md text-sm font-medium`}
               >
                 Home
               </Link>
-              {!isLoading && (
-                <>
-                  <a
-                    href="#"
-                    className={`block px-3 py-2 text-base font-medium ${
-                      pathname.startsWith('/dashboard') || pathname.startsWith('/admindash')
-                        ? 'bg-blue-50 border-l-4 border-blue-500 text-blue-700'
-                        : 'text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
-                    }`}
-                    onClick={handleDashboardClick}
+              <Link
+                href="/services"
+                className={`${
+                  pathname === '/services'
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:text-gray-900'
+                } px-3 py-2 rounded-md text-sm font-medium`}
+              >
+                Services
+              </Link>
+              <Link
+                href="/contact"
+                className={`${
+                  pathname === '/contact'
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:text-gray-900'
+                } px-3 py-2 rounded-md text-sm font-medium`}
+              >
+                Contact
+              </Link>
+              {user ? (
+                <div className="relative">
+                  <button
+                    ref={buttonRef}
+                    onClick={toggleDropdown}
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 focus:outline-none"
                   >
-                    {isAdmin ? 'Admin Dashboard' : 'Dashboard'}
-                  </a>
-                  {!user && (
-                    <>
-                      <Link
-                        href="/login"
-                        className="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Sign in
-                      </Link>
-                      <Link
-                        href="/register"
-                        className="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        Register
-                      </Link>
-                    </>
-                  )}
-                  {user && (
-                    <a
-                      href="#"
-                      className="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-                      onClick={handleSignOut}
+                    Account
+                    <svg
+                      className={`ml-2 h-5 w-5 transform ${
+                        dropdownOpen ? 'rotate-180' : ''
+                      }`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
                     >
-                      Sign out
-                    </a>
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {dropdownOpen && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+                    >
+                      {isAdmin ? (
+                        <Link
+                          href="/admindash/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      ) : (
+                        <Link
+                          href="/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleSignOut}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Sign out
+                      </button>
+                    </div>
                   )}
-                </>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Sign in
+                </Link>
               )}
             </div>
           </div>
-        )}
->>>>>>> 9b3c2d631955f7b6202f0f164032c3d88ff88ed7
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div className={`${isOpen ? 'block' : 'hidden'} sm:hidden`}>
+        <div className="px-2 pt-2 pb-3 space-y-1">
+          <Link
+            href="/"
+            className={`${
+              pathname === '/'
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-500 hover:text-gray-900'
+            } block px-3 py-2 rounded-md text-base font-medium`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/services"
+            className={`${
+              pathname === '/services'
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-500 hover:text-gray-900'
+            } block px-3 py-2 rounded-md text-base font-medium`}
+          >
+            Services
+          </Link>
+          <Link
+            href="/contact"
+            className={`${
+              pathname === '/contact'
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-500 hover:text-gray-900'
+            } block px-3 py-2 rounded-md text-base font-medium`}
+          >
+            Contact
+          </Link>
+          {user ? (
+            <>
+              {isAdmin ? (
+                <Link
+                  href="/admindash/dashboard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/dashboard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  Dashboard
+                </Link>
+              )}
+              <button
+                onClick={handleSignOut}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
+            >
+              Sign in
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   );
