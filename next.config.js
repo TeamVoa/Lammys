@@ -15,47 +15,6 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  webpack: (config, { isServer }) => {
-    config.module.rules.push({
-      test: /supabase\/functions/,
-      use: 'ignore-loader',
-    });
-    return config;
-  },
-  headers: async () => {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
-  // Add server configuration for Docker
-  webpackDevMiddleware: config => {
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-    }
-    return config
-  },
-  // Ensure Next.js listens on all network interfaces
-  server: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT, 10) || 3000
   }
 }
 

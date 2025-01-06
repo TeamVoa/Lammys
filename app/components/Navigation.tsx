@@ -30,6 +30,11 @@ export default function Navigation() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Close menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -44,31 +49,25 @@ export default function Navigation() {
     setIsOpen(!isOpen);
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-2xl font-bold text-gray-800">
-                Lammy's
-              </Link>
-            </div>
+          <div className="flex items-center">
+            <Link href="/" className="text-2xl font-bold text-gray-800">
+              Lammy's
+            </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
+          {/* Hamburger menu button */}
+          <div className="flex items-center">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-              aria-expanded="false"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition-colors"
+              aria-expanded={isOpen}
             >
-              <span className="sr-only">Open main menu</span>
-              {/* Icon when menu is closed */}
+              <span className="sr-only">Open menu</span>
+              {/* Hamburger icon */}
               <svg
                 className={`${isOpen ? 'hidden' : 'block'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +83,7 @@ export default function Navigation() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-              {/* Icon when menu is open */}
+              {/* Close icon */}
               <svg
                 className={`${isOpen ? 'block' : 'hidden'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -102,170 +101,111 @@ export default function Navigation() {
               </svg>
             </button>
           </div>
-
-          {/* Desktop menu */}
-          <div className="hidden sm:flex sm:items-center sm:ml-6">
-            <div className="flex space-x-4">
-              <Link
-                href="/"
-                className={`${
-                  pathname === '/'
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-500 hover:text-gray-900'
-                } px-3 py-2 rounded-md text-sm font-medium`}
-              >
-                Home
-              </Link>
-              <Link
-                href="/services"
-                className={`${
-                  pathname === '/services'
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-500 hover:text-gray-900'
-                } px-3 py-2 rounded-md text-sm font-medium`}
-              >
-                Services
-              </Link>
-              <Link
-                href="/contact"
-                className={`${
-                  pathname === '/contact'
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-500 hover:text-gray-900'
-                } px-3 py-2 rounded-md text-sm font-medium`}
-              >
-                Contact
-              </Link>
-              {user ? (
-                <div className="relative">
-                  <button
-                    ref={buttonRef}
-                    onClick={toggleDropdown}
-                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 focus:outline-none"
-                  >
-                    Account
-                    <svg
-                      className={`ml-2 h-5 w-5 transform ${
-                        dropdownOpen ? 'rotate-180' : ''
-                      }`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                  {dropdownOpen && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
-                    >
-                      {isAdmin ? (
-                        <Link
-                          href="/admindash/dashboard"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          Admin Dashboard
-                        </Link>
-                      ) : (
-                        <Link
-                          href="/dashboard"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          Dashboard
-                        </Link>
-                      )}
-                      <button
-                        onClick={handleSignOut}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Sign out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  href="/login"
-                  className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Sign in
-                </Link>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <div className={`${isOpen ? 'block' : 'hidden'} sm:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link
-            href="/"
-            className={`${
-              pathname === '/'
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-500 hover:text-gray-900'
-            } block px-3 py-2 rounded-md text-base font-medium`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/services"
-            className={`${
-              pathname === '/services'
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-500 hover:text-gray-900'
-            } block px-3 py-2 rounded-md text-base font-medium`}
-          >
-            Services
-          </Link>
-          <Link
-            href="/contact"
-            className={`${
-              pathname === '/contact'
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-500 hover:text-gray-900'
-            } block px-3 py-2 rounded-md text-base font-medium`}
-          >
-            Contact
-          </Link>
-          {user ? (
-            <>
-              {isAdmin ? (
-                <Link
-                  href="/admindash/dashboard"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
-                >
-                  Admin Dashboard
-                </Link>
-              ) : (
-                <Link
-                  href="/dashboard"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
-                >
-                  Dashboard
-                </Link>
-              )}
+      {/* Menu overlay */}
+      <div
+        className={`${
+          isOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
+        } fixed inset-0 z-40 transform transition-all duration-300 ease-in-out`}
+      >
+        <div className="absolute inset-0 bg-black opacity-25" onClick={toggleMenu}></div>
+        <div className="relative bg-white h-full w-64 shadow-xl">
+          <div className="pt-5 pb-6 px-5">
+            <div className="flex items-center justify-between mb-6">
+              <div className="h-8 w-auto text-xl font-bold">
+                Lammy's
+              </div>
               <button
-                onClick={handleSignOut}
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
+                onClick={toggleMenu}
+                className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               >
-                Sign out
+                <span className="sr-only">Close menu</span>
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
-            </>
-          ) : (
-            <Link
-              href="/login"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Sign in
-            </Link>
-          )}
+            </div>
+            <div className="mt-2">
+              <nav className="grid gap-y-4">
+                <Link
+                  href="/"
+                  className={`${
+                    pathname === '/'
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900'
+                  } px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/services"
+                  className={`${
+                    pathname === '/services'
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900'
+                  } px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                >
+                  Services
+                </Link>
+                <Link
+                  href="/contact"
+                  className={`${
+                    pathname === '/contact'
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900'
+                  } px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                >
+                  Contact
+                </Link>
+                {user ? (
+                  <>
+                    {isAdmin ? (
+                      <Link
+                        href="/admindash/dashboard"
+                        className="px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/dashboard"
+                        className="px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                  >
+                    Sign in
+                  </Link>
+                )}
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </nav>

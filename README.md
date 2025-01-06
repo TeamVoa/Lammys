@@ -1,16 +1,3 @@
-# Devin.cursorrules
-
-Transform your $20 Cursor/Windsurf into a Devin-like experience in one minute! This repository contains configuration files and tools that enhance your Cursor or Windsurf IDE with advanced agentic AI capabilities similar to Devin, including:
-
-- Process planning and self-evolution
-- Extended tool usage (web browsing, search, LLM-powered analysis)
-- Automated execution (for Windsurf in Docker containers)
-
-## Usage
-
-1. Copy all files from this repository to your project folder
-2. For Cursor users: The `.cursorrules` file will be automatically loaded
-3. For Windsurf users: Use both `.windsurfrules` and `scratchpad.md` for similar functionality
 
 ## Setup
 
@@ -33,6 +20,44 @@ pip install -r requirements.txt
 
 # Install Playwright's Chromium browser (required for web scraping)
 python -m playwright install chromium
+```
+
+## Docker Setup
+
+### Prerequisites
+- Docker installed on your machine
+- Docker Compose installed on your machine
+
+### Running with Docker
+
+1. Make sure you have the virtual environment activated.
+
+2. Build and start the container:
+```bash
+# Build and run the container
+docker-compose up --build
+
+# Or run in detached mode
+docker-compose up --build -d
+```
+
+3. Access the application at `http://localhost:3000`
+
+### Docker Commands
+
+- Stop the container:
+```bash
+docker-compose down
+```
+
+- View logs:
+```bash
+docker-compose logs -f
+```
+
+- Rebuild after changes:
+```bash
+docker-compose up --build
 ```
 
 ## Tools Included
