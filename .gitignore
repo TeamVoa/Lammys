@@ -48,6 +48,7 @@ next-env.d.ts
 /py310/
 requirements.txt
 .devcontainer/
+scratchpad.md
 
 # data files
 
