@@ -91,6 +91,5 @@ For detailed information about the motivation and technical details behind this 
 ## License
 
 MIT License
-# lammys
-# lammys
-# lammys 
+
+

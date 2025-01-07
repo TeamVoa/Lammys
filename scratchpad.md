@@ -8,37 +8,23 @@
 
 # Scratchpad
 
-# Current Task: Docker Image and Container Management
+# Current Task: Project Setup
 
 ## Task Description
-Check and manage Docker images and containers in the project.
+Setting up the development environment according to README.md instructions.
 
 ## Steps
-[X] List all Docker images
-[X] List all Docker containers (running and stopped)
-[ ] Check Docker system information
-[ ] Document any findings or issues
+[X] Create and activate Python virtual environment (py310)
+[X] Install project dependencies
+[X] Install Playwright's Chromium browser
+[X] Verify setup
 
-## Progress
-### Docker Images Found:
-1. restaurant-websitedocker_test-web:latest (1.2GB)
-2. lammys-06121b782d9650a3cfe10073cbb76e18e5abd38e-web:latest (2.83GB)
-
-### Container Status:
-- All containers are currently stopped
-- Multiple test containers present
-- Most recent container (d19229bff324) was created 38 minutes ago
-- Several older containers from previous builds present
-
-### Observations:
-1. No containers are currently running
-2. Multiple stopped containers could be cleaned up
-3. Two main images present with different sizes
-
-## Recommendations:
-1. Clean up unused containers using `docker container prune`
-2. Consider removing older images if not needed
-3. Review image sizes for optimization opportunities
+## Progress Notes
+- Successfully created Python virtual environment in py310 directory
+- Activated the virtual environment
+- Installed all Python dependencies from requirements.txt
+- Successfully installed Playwright's Chromium browser
+- Setup is now complete and verified
 
 ## Lessons
 1. Docker Configuration:
@@ -71,6 +57,23 @@ Check and manage Docker images and containers in the project.
 2. Implement CI/CD pipeline with Docker
 3. Add environment variable validation
 4. Consider adding health checks to Docker container
+
+# Current Task: Docker Container Setup
+
+## Task Description
+Building and running the Docker container for local website testing.
+
+## Steps
+[X] Fixed environment file naming (.env.local)
+[X] Started Docker container build using docker-compose
+[ ] Verify container is running
+[ ] Test website accessibility on localhost:3000
+
+## Progress Notes
+- Environment variables confirmed to be set up in .env.local
+- Docker build process initiated with docker-compose up --build
+- Building process may take a few minutes
+- Will be accessible at http://localhost:3000 when ready
 
 # Current Task: Clean Up Docker Containers
 
