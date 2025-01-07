@@ -50,7 +50,7 @@ requirements.txt
 .devcontainer/
 
 # data files
-scratchpad.md
+
 
 stripe-cli.zip
 stripe.exe
